@@ -1,0 +1,46 @@
+## This takes the windows that are cut out and saved using "sim_format.py"
+## and put them all together in to a single file that can be moved around 
+## by itself or alternatively read in at once for a training sesssion of 
+## the U-NET.
+# by Lachlan Lancaster
+
+import numpy as np
+import matplotlib.pyplot as plt
+import healpy as hp
+
+
+if __name__ == '__main__':
+	## Number of simulations to process
+	NUM_SIMS = 100
+	## HEALPix nside of the simulations, should always be 256
+	SIM_NSIDE = 256
+	## The HELAPix nside of the windows that were cut out
+	WINDOW_NSIDE = 4
+	## Number of frequency bins that are being read in
+	N_NU = 30
+
+	# string that gives the location of the simulations to be processed
+	dirstr = "/Volumes/My Passport for Mac/lachlanl/21cm_project/sims"
+	nwinds = hp.nside2npix(WINDOW_NSIDE)
+
+	## Arrays to be filled with data and saved
+	x_in = np.zeros((NUM_SIMS*nwinds,SIM_NSIDE/WINDOW_NSIDE,SIM_NSIDE/WINDOW_NSIDE,N_NU))
+	x_out = np.zeros((NUM_SIMS*nwinds,SIM_NSIDE/WINDOW_NSIDE,SIM_NSIDE/WINDOW_NSIDE,N_NU))
+
+	## Loop over the pixels that are selected on the sky
+	for PIX_SELEC in np.arange(nwinds):
+		## Loop over the number of the simulation
+		for SNUM in np.arange(1,NUM_SIMS + 1):
+			## read in foreground window cut-out
+			foreground = np.load("%s/run_fg_s1%03d/win%03d_fg.npy"%(dirstr,SNUM,PIX_SELEC))
+			## read in cosmological signal
+			cosmo = np.load("%s/run_pkEH_s1%03d/win%03d_cosmo.npy"%(dirstr,SNUM,PIX_SELEC))
+			## read in the observed signal, which I guess I decided to process separately
+			observed = np.load("%s/obs_s1%03d/win_fg1_%03d.npy"%(dirstr,SNUM,PIX_SELEC))
+			## This finds the right place to put them in the output file
+			ind = (SNUM-1)*nwinds + PIX_SELEC
+			x_in[ind] = observed
+			x_out[ind] = foreground
+	## Save everything when you're done
+	np.save("%s/observed_nsim%d"%(dirstr,NUM_SIMS),x_in)
+	np.save("%s/fg_nsim%d"%(dirstr,NUM_SIMS),x_out)
