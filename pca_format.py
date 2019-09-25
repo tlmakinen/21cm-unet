@@ -62,7 +62,7 @@ if __name__ == '__main__':
 			mask[ind_arr%obs_pca.shape[1]==i] = 0
 		obs_pca = obs_pca*mask
 		obs_pca_red = pca.inverse_transform(obs_pca)
-		print "Now I'm doing the minimum subtraction..."
+		print("Now I'm doing the minimum subtraction...")
 		obs_pca_red = obs - obs_pca_red
 
 		# get the array indices in the RING formulation
