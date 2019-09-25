@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
 	## "global" string with namee to disk directory where simulations are stored
 	## this is also where the new cut-out simulations will be saved
-	dirstr = "/Volumes/My Passport for Mac/lachlanl/21cm_project/sims"
+	dirstr = "/tigress/tmakinen/ska_sims"
 	
 
 	## THESE ARE THE STRINGS THAT SPECIFY WHETHER YOU ARE BREAKING DOWN THE 

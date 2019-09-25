@@ -12,7 +12,7 @@ if __name__ == '__main__':
 	## NSIDE OF THE WINDOWS WE WANT TO CUT OUT, IN PRINCIPLE COULD CHANGE THIS
 	WINDOW_NSIDE = 4
 	## "global" string with namee to disk directory where simulations are stored
-	dirstr = "/Volumes/My Passport for Mac/lachlanl/21cm_project/sims"
+	dirstr = "/tigress/tmakinen/ska_sims"
 
 
 

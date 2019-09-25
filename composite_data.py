@@ -20,7 +20,7 @@ if __name__ == '__main__':
 	N_NU = 30
 
 	# string that gives the location of the simulations to be processed
-	dirstr = "/Volumes/My Passport for Mac/lachlanl/21cm_project/sims"
+	dirstr = "/tigress/tmakinen/ska_sims"
 	nwinds = hp.nside2npix(WINDOW_NSIDE)
 
 	## Arrays to be filled with data and saved

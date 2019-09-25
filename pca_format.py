@@ -39,7 +39,7 @@ if __name__ == '__main__':
 	rearr = gen_rearr(int(np.log2(MAP_NSIDE/WINDOW_NSIDE)))
 	nwinds = hp.nside2npix(WINDOW_NSIDE)
 	# "global" string with name to disk directory
-	dirstr = "/Volumes/My Passport for Mac/lachlanl/21cm_project/sims"
+	dirstr = "/tigress/tmakinen/ska_sims"
 	# initialize the PCA algorithm
 	pca = PCA()
 	
