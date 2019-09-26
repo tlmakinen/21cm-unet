@@ -43,6 +43,8 @@ if __name__ == '__main__':
 	WINDOW_LENGTH = int(np.sqrt(NPIX_WINDOW))
 	rearr = gen_rearr(int(np.log2(MAP_NSIDE/WINDOW_NSIDE)))
 
+	print(rearr)
+
 	## "global" string with namee to disk directory where simulations are stored
 	## this is also where the new cut-out simulations will be saved
 	dirstr = "/tigress/tmakinen/ska_sims"
