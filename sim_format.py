@@ -80,6 +80,7 @@ if __name__ == '__main__':
 			to_rearr_inds = inds_nest[inds_in] - PIX_SELEC*NPIX_WINDOW
 			#to_rearr = fgd
 			to_rearr = fgd[inds_in]
+			print(to_rearr)
 			to_rearr = (to_rearr[np.argsort(to_rearr_inds)])[rearr]
 			to_rearr = np.reshape(to_rearr,(WINDOW_LENGTH,WINDOW_LENGTH,NU_AVG))
 
