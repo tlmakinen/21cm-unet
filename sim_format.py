@@ -68,18 +68,19 @@ if __name__ == '__main__':
 		# average in frequency bins and transpose
 		fgd = np.array([np.mean(i,axis=0) for i in np.split(fgd,NU_AVG)]).T
 
-		# get the array indies in the RING formulation
+		# get the array indicies in the RING formulation
 		inds = np.arange(hp.nside2npix(MAP_NSIDE))
 		# transfer these to what they would be in the NESTED formulation
 		inds_nest = hp.ring2nest(MAP_NSIDE,inds)
 
 		for PIX_SELEC in np.arange(hp.nside2npix(WINDOW_NSIDE)):
 		# get the indices of the pixels which actually are in the larger pixel
-			inds_in = np.where((inds_nest/NPIX_WINDOW)==PIX_SELEC)
-			to_rearr_inds = inds_nest[inds_in] - PIX_SELEC*NPIX_WINDOW
-			to_rearr = fgd[inds_in]
-			to_rearr = (to_rearr[np.argsort(to_rearr_inds)])[rearr]
-			to_rearr = np.reshape(to_rearr,(WINDOW_LENGTH,WINDOW_LENGTH,NU_AVG))
+			#inds_in = np.where((inds_nest/NPIX_WINDOW)==PIX_SELEC)
+			#to_rearr_inds = inds_nest[inds_in] - PIX_SELEC*NPIX_WINDOW
+			to_rearr = fgd
+			#to_rearr = fgd[inds_in]
+			#to_rearr = (to_rearr[np.argsort(to_rearr_inds)])[rearr]
+			#to_rearr = np.reshape(to_rearr,(WINDOW_LENGTH,WINDOW_LENGTH,NU_AVG))
 
 			np.save("%s/run_%s_s1%03d/win%03d_%s"%(dirstr,type_str,SNUM,PIX_SELEC,type_str2),to_rearr)
 
