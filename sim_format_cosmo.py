@@ -27,7 +27,7 @@ if __name__ == '__main__':
 	## "GLOBAL" parameters
 	
 	## NUMBER OF FREQUENCY BINS YOU'D LIKE TO LOOK AT
-	N_NU = 30 
+	N_NU = 30
 	## NUMBER OF BINS TO AVERAGE OVER (SET EQUAL TO 1 IF YOU DON'T WANT TO AVERAGE)
 	NU_AVG = 1
 	assert((N_NU%NU_AVG) ==0)
@@ -73,7 +73,6 @@ if __name__ == '__main__':
 		# transfer these to what they would be in the NESTED formulation
 		inds_nest = hp.ring2nest(MAP_NSIDE,inds)
 
-		# EDIT: since we're not averaging pixels together, no need to rearrange indices
 		for PIX_SELEC in np.arange(hp.nside2npix(WINDOW_NSIDE)):
 		# get the indices of the pixels which actually are in the larger pixel
 			#print(PIX_SELEC)

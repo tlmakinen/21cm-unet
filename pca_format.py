@@ -26,7 +26,7 @@ if __name__ == '__main__':
 	# "GLOBAL" parameters
 	(NU_L,NU_H) = (1,30)
 	DO_NU_AVG = False
-	NU_AVG = 30
+	NU_AVG = 30   # EDIT
 	assert(((NU_H-NU_L + 1)%NU_AVG) ==0)
 	MAP_NSIDE = 256
 	WINDOW_NSIDE = 4
@@ -36,6 +36,10 @@ if __name__ == '__main__':
 	NPIX_WINDOW = (MAP_NSIDE/WINDOW_NSIDE)**2
 	# actual side length of window
 	WINDOW_LENGTH = int(np.sqrt(NPIX_WINDOW))
+
+	## Number of frequency bins that are being read in
+	N_NU = 30
+
 	rearr = gen_rearr(int(np.log2(MAP_NSIDE/WINDOW_NSIDE)))
 	nwinds = hp.nside2npix(WINDOW_NSIDE)
 	# "global" string with name to disk directory
@@ -46,13 +50,14 @@ if __name__ == '__main__':
 	x_out = np.zeros((NUM_SIMS*nwinds,64,64,30))
 	for SNUM in np.arange(1,NUM_SIMS + 1):
 		# Open the Fits files for foreground and ccosmological signal
-		fgd = np.array([fits.getdata("%s/run_fg_s1%03d/fg_%03d.fits"%(dirstr,SNUM,nu+1),1) for nu in range(N_NU)],dtype=np.float64)
-		cosmo = np.array([fits.getdata("%s/run_pkEH_s1%03d/cosmo_%03d.fits"%(dirstr,SNUM,nu+1),1) for nu in range(N_NU)],dtype=np.float64)
+		fgd = np.array([fits.getdata("%s/run_fg_s1%03d/fg_%03d.fits"%(dirstr,SNUM,nu+1),1) for nu in range(N_NU)],dtype=np.float64).T
+		cosmo = np.array([fits.getdata("%s/run_pkEH_s1%03d/cosmo_%03d.fits"%(dirstr,SNUM,nu+1),1) for nu in range(N_NU)],dtype=np.float64).T
 		# average in frequency bins and transpose
-		fgd = np.array([np.mean(i,axis=0) for i in np.split(fgd,NU_AVG)]).T
-		cosmo = np.array([np.mean(i,axis=0) for i in np.split(cosmo,NU_AVG)]).T
+		#fgd = np.array([np.mean(i,axis=0) for i in np.split(fgd,NU_AVG)]).T
+		#cosmo = np.array([np.mean(i,axis=0) for i in np.split(cosmo,NU_AVG)]).T
 		# create the observed signal as a sum of the forground and cosmological signal
 		obs = fgd + cosmo
+		print(obs.shape)
 		pca.fit(obs)
 
 		obs_pca = pca.transform(obs)
@@ -67,7 +72,7 @@ if __name__ == '__main__':
 
 		# get the array indices in the RING formulation
 		inds = np.arange(hp.nside2npix(MAP_NSIDE))
-		# transfer these to what they would be in the NESTED formulation
+		# transfer these to what they would be in the NESTED formulation  
 		inds_nest = hp.ring2nest(MAP_NSIDE,inds)
 		
 
@@ -77,7 +82,7 @@ if __name__ == '__main__':
 			to_rearr_inds = inds_nest[inds_in] - PIX_SELEC*NPIX_WINDOW
 			to_rearr = obs_pca_red[inds_in]
 			to_rearr = (to_rearr[np.argsort(to_rearr_inds)])[rearr]
-			to_rearr = np.reshape(to_rearr,(WINDOW_LENGTH,WINDOW_LENGTH,NU_AVG))
+			to_rearr = np.reshape(to_rearr,(WINDOW_LENGTH,WINDOW_LENGTH,N_NU))
 			ind = (SNUM-1)*nwinds + PIX_SELEC
 			x_out[ind] = to_rearr
 

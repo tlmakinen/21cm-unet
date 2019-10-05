@@ -27,7 +27,7 @@ if __name__ == '__main__':
 	## "GLOBAL" parameters
 	
 	## NUMBER OF FREQUENCY BINS YOU'D LIKE TO LOOK AT
-	N_NU = 30 
+	N_NU = 30
 	## NUMBER OF BINS TO AVERAGE OVER (SET EQUAL TO 1 IF YOU DON'T WANT TO AVERAGE)
 	NU_AVG = 1
 	assert((N_NU%NU_AVG) ==0)
@@ -54,12 +54,12 @@ if __name__ == '__main__':
 	## FOREGROUND SIMULATIONS OR THE COSMOLOGICAL SIMULATIONS
 
 	## FOR FOREGROUND 	
-	#type_str = "fg"
-	#type_str2 = "fg"
+	type_str = "fg"
+	type_str2 = "fg"
 
 	## FOR COSMOLOGICAL SIGNAL
-	type_str = "pkEH"
-	type_str2 = "cosmo"
+	#type_str = "pkEH"
+	#type_str2 = "cosmo"
 	
 
 	for SNUM in np.arange(1,NUM_SIMS + 1):

@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 
-config = tf.ConfigProto( device_count = {'GPU': 1 , 'CPU': 28} ) 
+config = tf.ConfigProto( device_count = {'GPU': 4 , 'CPU': 112} ) 
 sess = tf.Session(config=config) 
 keras.backend.set_session(sess)
 
@@ -61,8 +61,14 @@ output = keras.layers.Conv2DTranspose(30,1,padding="same",name="output")(concat4
 ## Compile the model
 model = keras.models.Model(inputs=inputs,outputs=output)
 
+#model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 
-model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
+
+## Now make the model parallelize over multiple GPUs
+parallel_model = keras.utils.multi_gpu_model(model, gpus=4)
+## Compile parallel model
+parallel_model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])  # TRY: categorical_crossentropy loss
+
 
 dirstr = "/tigress/tmakinen/ska_sims"
 NUM_SIMS = 100
@@ -88,15 +94,15 @@ x_test = data[M:]
 y_test = signal[M:]
 
 ## Train the model
-N_EPOCHS = 1000
+N_EPOCHS = 100
 N_BATCH = 64
-history = model.fit(x_train,y_train,batch_size=N_BATCH,epochs=N_EPOCHS,validation_data=(x_val, y_val))
+history = parallel_model.fit(x_train,y_train,batch_size=N_BATCH,epochs=N_EPOCHS,validation_data=(x_val, y_val))
 
-# Save the resultsii of the training
-model.save_weights("/home/tmakinen/repositories/models/first_model.h5")
+# Save the results of the training
+parallel_model.save("/home/tmakinen/repositories/models/first_model.h5")
 
 ## Evaluate the Model, if you haven't trained the model, it should do pretty poorly!! But it should still work
-y_pred = model.predict(x_test)
+y_pred = parallel_model.predict(x_test)
 
 xval_c1 = x_test.transpose()[15].transpose()
 yval_c1 = y_test.transpose()[15].transpose()

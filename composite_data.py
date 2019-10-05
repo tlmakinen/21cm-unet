@@ -21,11 +21,13 @@ if __name__ == '__main__':
 
 	# string that gives the location of the simulations to be processed
 	dirstr = "/tigress/tmakinen/ska_sims"
+	savestr = "/home/tmakinen/datasets"
 	nwinds = hp.nside2npix(WINDOW_NSIDE)
 
 	## Arrays to be filled with data and saved
 	x_in = np.zeros((NUM_SIMS*nwinds,SIM_NSIDE/WINDOW_NSIDE,SIM_NSIDE/WINDOW_NSIDE,N_NU))
 	x_out = np.zeros((NUM_SIMS*nwinds,SIM_NSIDE/WINDOW_NSIDE,SIM_NSIDE/WINDOW_NSIDE,N_NU))
+	cosmo_arr = np.zeros((NUM_SIMS*nwinds,SIM_NSIDE/WINDOW_NSIDE,SIM_NSIDE/WINDOW_NSIDE,N_NU))
 
 	## Loop over the pixels that are selected on the sky
 	for PIX_SELEC in np.arange(nwinds):
@@ -41,6 +43,8 @@ if __name__ == '__main__':
 			ind = (SNUM-1)*nwinds + PIX_SELEC
 			x_in[ind] = observed
 			x_out[ind] = foreground
+			cosmo_arr[ind] = cosmo
 	## Save everything when you're done
 	np.save("%s/observed_nsim%d"%(dirstr,NUM_SIMS),x_in)
 	np.save("%s/fg_nsim%d"%(dirstr,NUM_SIMS),x_out)
+	np.save("%s/cosmo_nsim%d"%(dirstr,NUM_SIMS),cosmo_arr)

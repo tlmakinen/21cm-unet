@@ -5,6 +5,7 @@
 
 import numpy as np
 import healpy as hp
+import os
 
 if __name__ == '__main__':
 	## NUMBER OF SIMULATIONS TO PROCESS, ANYWHERE BETWEEN 1 AND 100
@@ -24,5 +25,10 @@ if __name__ == '__main__':
 
 			## **NOTE** NEW OBSERVED SIGNALS ARE SAVED IN DIRECTORIES THAT SHOULD HAVE 
 			## TO BE CREATED! YOU CAN EITHER CREATE THEM OR CHANGE HOW THEY'RE SAVED
+
+			# create output directory
+			if not os.path.exists("%s/obs_s1%03d"%(dirstr,SNUM)): 
+				os.mkdir("%s/obs_s1%03d"%(dirstr,SNUM))
+
 			np.save("%s/obs_s1%03d/win_fg1_%03d"%(dirstr,SNUM,PIX_SELEC),observed)
 
